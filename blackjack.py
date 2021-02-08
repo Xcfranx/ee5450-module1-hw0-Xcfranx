@@ -78,13 +78,20 @@ class Blackjack(object):
         self._current_turn = 0
 
     def _create_stack(self, num_decks: int) -> List[Card]:
+
         """
         Creates the stack of the cards (52 * num_decks), shuffled.
-
+        
         :param num_decks: number of decks to use
         :return: stack of all card objects, shuffled.
         """
-        pass
+        cardstack = []
+        for h in range(num_decks):
+            for i in range(4):
+                for j in range(self._LOWEST_CARD, self._HIGHEST_CARD + 1):
+                   cardstack.append(j)
+        print(cardstack)
+        return cardstack
 
     def calculate_optimal_ace_sum(self, number_of_ace_cards: int, current_sum: int,
                                   target_sum: int) -> int:
@@ -96,7 +103,13 @@ class Blackjack(object):
         :param target_sum: target sum after ace cards
         :return: the optimal Ace-only sum to use
         """
-        pass
+        if number_of_ace_cards > 0:
+            if 11 + (number_of_ace_cards - 1) + current_sum <= target_sum:
+                ace_sum = 11 + (number_of_ace_cards - 1)
+            else:
+                ace_sum = number_of_ace_cards
+        print(ace_sum)
+        return ace_sum
 
     def _calculate_no_aces(self, stack: List[int]) -> int:
         """
@@ -105,7 +118,13 @@ class Blackjack(object):
         :param stack: List of all the card numbers without Aces
         :return: Sum of clipped cards (clipped to self._MAX_ROYALTY)
         """
-        pass
+        noacestack = []
+        for h in range(num_decks):
+            for i in range(4):
+                for j in range(self._LOWEST_CARD, self._HIGHEST_CARD + 1):
+                    cardstack.append(j)
+        print(noacestack)
+        return noacestack
 
     def _calculate_stack_sum(self, stack: List[Card]) -> int:
         """
@@ -122,7 +141,8 @@ class Blackjack(object):
 
         :return: Card object
         """
-        pass
+        return self._card_stack.pop()
+
 
     def _dealer_draw(self, silent: bool = False) -> bool:
         """
@@ -185,7 +205,19 @@ class Blackjack(object):
         :param player_sum: optimal sum of the player's stack
         :return: the winner: 'NONE', 'DEALER', or 'PLAYER'
         """
-        pass
+        the_victor = 0
+
+        if(dealer_sum == 21 and player_sum == 21):
+            the_victor = "NONE"
+
+        if (dealer_sum == 21 and player_sum != 21):
+            the_victor = "DEALER"
+
+        if (dealer_sum != 21 and player_sum == 21):
+            the_victor = "PLAYER"
+
+        print(the_victor)
+        return the_victor
 
     def _compute_winners(self) -> List[str]:
         """
