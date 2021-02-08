@@ -86,10 +86,12 @@ class Blackjack(object):
         :return: stack of all card objects, shuffled.
         """
         cardstack = []
+        cardtype = self._SUITS
+        cardtotal = range(self._LOWEST_CARD, self._HIGHEST_CARD + 1)
         for h in range(num_decks):
-            for i in range(4):
-                for j in range(self._LOWEST_CARD, self._HIGHEST_CARD + 1):
-                   cardstack.append(j)
+            for i in cardtype:
+                for j in (cardtotal):
+                   cardstack.append(Card(i,j))
         print(cardstack)
         return cardstack
 
@@ -118,13 +120,16 @@ class Blackjack(object):
         :param stack: List of all the card numbers without Aces
         :return: Sum of clipped cards (clipped to self._MAX_ROYALTY)
         """
-        noacestack = []
-        for h in range(num_decks):
-            for i in range(4):
-                for j in range(self._LOWEST_CARD, self._HIGHEST_CARD + 1):
-                    cardstack.append(j)
-        print(noacestack)
-        return noacestack
+        x = 0
+        for h in range(10):
+            for i in stack:
+                if i > self._MAX_ROYALTY:
+                    stack.remove(i)
+                    stack.append(10)
+        x = sum(stack)
+        print(stack)
+        print(x)
+        return x
 
     def _calculate_stack_sum(self, stack: List[Card]) -> int:
         """
@@ -133,7 +138,17 @@ class Blackjack(object):
         :param stack: List of Card objects to calculate the sum with
         :return: The sum that minimizes the distance to optimal_sum
         """
-        pass
+        ace = 1
+        nonacecards = []
+        numberacecards = 0
+        for card in stack:
+            if card.number != ace:
+                nonacecards.append(card.number)
+            else:
+                numberacecards = numberacecards + 1
+        a = self._calculate_no_aces(nonacecards)
+        b = self.calculate_optimal_ace_sum(numberacecards, a, 21)
+        return a + b
 
     def _draw_card(self) -> Card:
         """
@@ -141,7 +156,10 @@ class Blackjack(object):
 
         :return: Card object
         """
-        return self._card_stack.pop()
+        x = random.choice(self._card_stack)
+        self._card_stack.remove(x)
+        print(x)
+        return x
 
 
     def _dealer_draw(self, silent: bool = False) -> bool:
@@ -151,7 +169,9 @@ class Blackjack(object):
         :param silent: True if this is a silent draw (no logging).
         :return: dealer is done hitting.
         """
-        pass
+        sumdealerdraw = sum(self._dealer_stack)
+        if (sumdealerdraw <= 17):
+    #if less than 17 dealer draws card
 
     def _player_draw(self, player_idx: int) -> Card:
         """
@@ -160,7 +180,10 @@ class Blackjack(object):
         :param player_idx:  The player to which a card should be drawn
         :return: The drawn card (already placed in the player's stack)
         """
-        pass
+        x = random.choice(self._card_stack)
+        self._player_stacks.append(x)
+        print(x)
+        return x
 
     def _player_choice(self, player_idx: int) -> bool:
         """
@@ -186,7 +209,8 @@ class Blackjack(object):
 
         :return: (dealer_sum, [player_sum])
         """
-        pass
+        dealer_sum = sum(self._dealer_stack)
+        player_sum = sum(self._player_stacks)
 
     def _compute_winner(self, dealer_sum: int, player_sum: int) -> str:
         """
@@ -248,6 +272,9 @@ class Blackjack(object):
         3. Draws twice for each player.
         """
         pass
+        if (self._dealer_draw < 2):
+            x = self._card_stack.pop()
+            self._dealer_draw.append(x)
 
     def run(self):
         print(BLACKJACK_INSTRUCTIONS['English']['START'])
