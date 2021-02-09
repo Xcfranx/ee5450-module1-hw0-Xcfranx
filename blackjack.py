@@ -300,14 +300,14 @@ class Blackjack(object):
         if x < 0:
             self._dealer_stack.append
         else:
-            draw = False
-            drawn_card = self._draw_card()
-            self._dealer_stack.append(drawn_card)
-            if not silent:
-                print('Dealer draws: ' + str(drawn_card))
-        print(x)
+            x = 2:
+            #once dealer has two cards they are ready
 
-        return draw
+            player_idx = 0
+            x = random.choice(self._card_stack)
+            y = self._player_stacks[player_idx].append(x)
+            print(x)
+            return x
 
         if (self._dealer_draw < 2):
             x = self._card_stack.pop()
