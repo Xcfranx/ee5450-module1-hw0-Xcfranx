@@ -105,6 +105,7 @@ class Blackjack(object):
         :param target_sum: target sum after ace cards
         :return: the optimal Ace-only sum to use
         """
+        ace_sum = 0
         if number_of_ace_cards > 0:
             if 11 + (number_of_ace_cards - 1) + current_sum <= target_sum:
                 ace_sum = 11 + (number_of_ace_cards - 1)
@@ -112,6 +113,7 @@ class Blackjack(object):
                 ace_sum = number_of_ace_cards
         print(ace_sum)
         return ace_sum
+
 
     def _calculate_no_aces(self, stack: List[int]) -> int:
         """
@@ -169,9 +171,20 @@ class Blackjack(object):
         :param silent: True if this is a silent draw (no logging).
         :return: dealer is done hitting.
         """
-        sumdealerdraw = sum(self._dealer_stack)
-        if (sumdealerdraw <= 17):
-    #if less than 17 dealer draws card
+        x = self._calculate_stack_sum(self._dealer_stack)
+        if x >= 17:
+            draw = True
+        else:
+            draw = False
+            drawn_card = self._draw_card()
+            self._dealer_stack.append(drawn_card)
+            if not silent:
+                print('Dealer draws: ' + str(drawn_card))
+        print(x)
+
+        return draw
+
+
 
     def _player_draw(self, player_idx: int) -> Card:
         """
@@ -180,8 +193,9 @@ class Blackjack(object):
         :param player_idx:  The player to which a card should be drawn
         :return: The drawn card (already placed in the player's stack)
         """
+        player_idx = 0
         x = random.choice(self._card_stack)
-        self._player_stacks.append(x)
+        y = self._player_stacks[player_idx].append(x)
         print(x)
         return x
 
@@ -209,8 +223,18 @@ class Blackjack(object):
 
         :return: (dealer_sum, [player_sum])
         """
-        dealer_sum = sum(self._dealer_stack)
-        player_sum = sum(self._player_stacks)
+        player_sum = []
+        for x in range(self._num_players):
+
+            dealer_sum = self._calculate_stack_sum(self._dealer_stack)
+            player_ = self._calculate_stack_sum(self._player_stacks[x])
+            player_sum.append(player_)
+
+            print(dealer_sum)
+            print(player_sum)
+
+            return dealer_sum, player_sum
+
 
     def _compute_winner(self, dealer_sum: int, player_sum: int) -> str:
         """
@@ -271,7 +295,20 @@ class Blackjack(object):
         2. Silent dealer draw.
         3. Draws twice for each player.
         """
-        pass
+        card = []
+        x = self._calculate_stack_sum(self._dealer_stack)
+        if x < 0:
+            self._dealer_stack.append
+        else:
+            draw = False
+            drawn_card = self._draw_card()
+            self._dealer_stack.append(drawn_card)
+            if not silent:
+                print('Dealer draws: ' + str(drawn_card))
+        print(x)
+
+        return draw
+
         if (self._dealer_draw < 2):
             x = self._card_stack.pop()
             self._dealer_draw.append(x)
